@@ -1,0 +1,749 @@
+<title>Arranque 90 Días</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --ground:#F3F5F1; --surface:#FFFFFF; --surface-2:#E9EDE7; --sunk:#DFE4DC;
+  --ink:#15201C; --ink-2:#48544E; --ink-3:#76817B;
+  --line:#D4DAD2; --line-2:#BFC7BD;
+  --accent:#0E6A5D; --accent-ink:#0B4E44; --accent-soft:#DCEBE5;
+  --gold:#9C6218; --gold-soft:#F3E6D2;
+  --ok:#2C7A4C; --warn:#A9701A; --crit:#9E382C;
+  --shadow:0 1px 2px rgba(21,32,28,.05), 0 8px 24px -14px rgba(21,32,28,.28);
+  --display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --measure:68ch;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1513; --surface:#161E1B; --surface-2:#1D2724; --sunk:#121A17;
+    --ink:#E7ECE8; --ink-2:#A6B1AB; --ink-3:#7A857F;
+    --line:#28332F; --line-2:#36433E;
+    --accent:#4FBFA8; --accent-ink:#8ED9C8; --accent-soft:#14312B;
+    --gold:#D69B4E; --gold-soft:#31261479;
+    --ok:#5CBF86; --warn:#D8A14A; --crit:#E07A69;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1513; --surface:#161E1B; --surface-2:#1D2724; --sunk:#121A17;
+  --ink:#E7ECE8; --ink-2:#A6B1AB; --ink-3:#7A857F;
+  --line:#28332F; --line-2:#36433E;
+  --accent:#4FBFA8; --accent-ink:#8ED9C8; --accent-soft:#14312B;
+  --gold:#D69B4E; --gold-soft:#31261479;
+  --ok:#5CBF86; --warn:#D8A14A; --crit:#E07A69;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 28px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--body); font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:0 clamp(18px,4vw,44px) 120px}
+
+/* ---------- masthead ---------- */
+.mast{padding:clamp(38px,6vw,72px) 0 26px; border-bottom:2px solid var(--ink)}
+.kicker{
+  font-family:var(--mono); font-size:11.5px; font-weight:500; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); margin:0 0 18px;
+  display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+}
+.kicker span:not(:first-child)::before{content:"/"; color:var(--line-2); margin-right:14px}
+h1{
+  font-family:var(--display); font-weight:700; letter-spacing:-.022em;
+  font-size:clamp(38px,7vw,68px); line-height:1.02; margin:0 0 18px;
+  text-wrap:balance;
+}
+.dek{font-size:clamp(18px,2.2vw,21px); color:var(--ink-2); max-width:60ch; margin:0}
+
+.facts{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:0; margin:34px 0 0; border-top:1px solid var(--line);
+}
+.fact{padding:16px 20px 16px 0; border-right:1px solid var(--line)}
+.fact:last-child{border-right:0}
+.fact dt{font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3); margin:0 0 6px}
+.fact dd{margin:0; font-family:var(--display); font-weight:600; font-size:17px; line-height:1.3}
+
+/* ---------- nav ---------- */
+nav.toc{
+  position:sticky; top:0; z-index:20; background:var(--ground);
+  border-bottom:1px solid var(--line); margin-bottom:0;
+  padding:10px 0; overflow-x:auto;
+}
+nav.toc ol{
+  list-style:none; display:flex; gap:0; margin:0; padding:0;
+  font-family:var(--mono); font-size:11.5px; white-space:nowrap;
+}
+nav.toc a{
+  display:block; padding:5px 13px 5px 0; margin-right:13px;
+  border-right:1px solid var(--line); color:var(--ink-2); text-decoration:none;
+}
+nav.toc li:last-child a{border-right:0}
+nav.toc a:hover{color:var(--accent)}
+nav.toc a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ---------- sections ---------- */
+section{padding:54px 0 10px; border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.sec-head{display:flex; gap:18px; align-items:baseline; margin:0 0 22px}
+.sec-num{
+  font-family:var(--mono); font-size:12px; font-weight:600; color:var(--accent);
+  letter-spacing:.08em; padding-top:6px; flex:none;
+}
+h2{
+  font-family:var(--display); font-weight:700; letter-spacing:-.017em;
+  font-size:clamp(25px,3.6vw,36px); line-height:1.12; margin:0; text-wrap:balance;
+}
+h3{
+  font-family:var(--display); font-weight:600; letter-spacing:-.01em;
+  font-size:20px; line-height:1.25; margin:38px 0 10px; text-wrap:balance;
+}
+h4{
+  font-family:var(--mono); font-weight:600; font-size:11.5px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-3); margin:26px 0 8px;
+}
+p{margin:0 0 14px; max-width:var(--measure)}
+ul,ol{max-width:var(--measure); padding-left:20px; margin:0 0 14px}
+li{margin-bottom:7px}
+strong{font-weight:600}
+a{color:var(--accent-ink)}
+code, .m{font-family:var(--mono); font-size:.88em; background:var(--surface-2); padding:1px 5px; border-radius:3px}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:500}
+
+/* ---------- regla ---------- */
+.regla{
+  max-width:var(--measure); margin:16px 0 22px; padding:14px 18px;
+  background:var(--surface); border-left:3px solid var(--accent);
+  font-size:15.5px; line-height:1.55; color:var(--ink-2);
+}
+.regla b{
+  display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:5px; font-weight:600;
+}
+.regla p{margin:0 0 8px; max-width:none}
+.regla p:last-child{margin:0}
+
+/* ---------- tables ---------- */
+.tw{overflow-x:auto; margin:18px 0 24px; border:1px solid var(--line); background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:640px; font-size:15px}
+th,td{padding:11px 14px; text-align:left; vertical-align:top; border-bottom:1px solid var(--line)}
+thead th{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:600; background:var(--surface-2);
+  border-bottom:1px solid var(--line-2); position:sticky; top:0;
+}
+tbody tr:last-child td{border-bottom:0}
+td.n{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+th.wk{width:52px}
+td.wk{font-family:var(--mono); font-weight:600; color:var(--accent); white-space:nowrap}
+
+.pill{
+  display:inline-block; font-family:var(--mono); font-size:10.5px; font-weight:600;
+  letter-spacing:.06em; padding:2px 8px; border-radius:999px; white-space:nowrap;
+}
+.p-hi{background:var(--accent-soft); color:var(--accent-ink)}
+.p-mid{background:var(--gold-soft); color:var(--gold)}
+.p-lo{background:var(--surface-2); color:var(--ink-3)}
+
+/* ---------- picks ---------- */
+.picks{display:grid; grid-template-columns:repeat(auto-fit,minmax(268px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin:22px 0 26px}
+.pick{background:var(--surface); padding:22px}
+.pick .tag{font-family:var(--mono); font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--accent); font-weight:600}
+.pick h5{font-family:var(--display); font-weight:700; font-size:19px; margin:8px 0 10px; line-height:1.2; letter-spacing:-.01em}
+.pick p{font-size:15px; color:var(--ink-2); margin:0 0 12px}
+.pick dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:13.5px; border-top:1px solid var(--line); padding-top:11px}
+.pick dt{font-family:var(--mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); padding-top:3px}
+.pick dd{margin:0; font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:500}
+
+/* ---------- funnel ---------- */
+.funnel{display:grid; gap:1px; background:var(--line); border:1px solid var(--line); margin:20px 0 8px; max-width:760px}
+.fr{background:var(--surface); display:grid; grid-template-columns:1fr auto; align-items:center; gap:14px; padding:12px 16px}
+.fr .bar{height:100%; }
+.fr .lbl{display:flex; align-items:center; gap:12px; font-size:15px}
+.fr .meter{height:9px; background:var(--accent); border-radius:2px; flex:none; opacity:.85}
+.fr .v{font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:600; font-size:15px}
+.fr .v small{color:var(--ink-3); font-weight:400; font-size:11.5px; display:block; text-align:right; letter-spacing:.04em}
+
+/* ---------- checklists ---------- */
+.clhead{display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; margin:26px 0 10px; max-width:var(--measure)}
+.prog{display:flex; align-items:center; gap:10px; font-family:var(--mono); font-size:11.5px; color:var(--ink-3); letter-spacing:.06em}
+.track{width:120px; height:5px; background:var(--sunk); border-radius:999px; overflow:hidden}
+.track i{display:block; height:100%; width:0%; background:var(--accent); transition:width .22s ease}
+ol.check{list-style:none; padding:0; margin:0 0 10px; border:1px solid var(--line); background:var(--surface); max-width:860px}
+ol.check li{
+  display:grid; grid-template-columns:26px 30px 1fr; gap:12px; align-items:start;
+  padding:13px 16px; margin:0; border-bottom:1px solid var(--line);
+}
+ol.check li:last-child{border-bottom:0}
+ol.check .idx{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); padding-top:4px; font-variant-numeric:tabular-nums}
+ol.check input{width:17px; height:17px; margin:4px 0 0; accent-color:var(--accent); cursor:pointer}
+ol.check .body{font-size:15.5px; line-height:1.5}
+ol.check .body b{font-family:var(--display); font-weight:600; font-size:16px; display:block; margin-bottom:2px}
+ol.check .body span{color:var(--ink-2); font-size:14.5px}
+ol.check .cost{font-family:var(--mono); font-size:12px; color:var(--gold); display:block; margin-top:4px; letter-spacing:.02em}
+ol.check li.done .body b, ol.check li.done .body span{opacity:.5}
+ol.check li.done .body b{text-decoration:line-through}
+input:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* ---------- day shape ---------- */
+.day{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); margin:20px 0 26px}
+.blk{background:var(--surface); padding:18px}
+.blk .t{font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--accent); font-weight:600}
+.blk .h{font-family:var(--display); font-weight:700; font-size:30px; letter-spacing:-.02em; margin:6px 0 2px; font-variant-numeric:tabular-nums}
+.blk .h small{font-size:13px; font-weight:500; color:var(--ink-3); font-family:var(--mono); letter-spacing:0}
+.blk .n{font-family:var(--display); font-weight:600; font-size:15.5px; margin:8px 0 4px}
+.blk p{font-size:14px; color:var(--ink-2); margin:0}
+
+/* ---------- split ---------- */
+.split{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:26px; margin:20px 0 10px}
+.split > div > h4{margin-top:0}
+.split ul{max-width:none}
+
+.dur{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:20px; margin:20px 0 10px}
+.dur > div{padding:20px; background:var(--surface); border-top:3px solid var(--line-2)}
+.dur > div.keep{border-top-color:var(--ok)}
+.dur > div.drop{border-top-color:var(--crit)}
+.dur h4{margin-top:0}
+.dur ul{max-width:none; font-size:15px}
+
+.warnbox{
+  max-width:var(--measure); border:1px solid var(--line); border-left:3px solid var(--warn);
+  background:var(--surface); padding:14px 18px; margin:18px 0; font-size:15.5px; color:var(--ink-2);
+}
+.warnbox b{color:var(--ink); font-family:var(--display)}
+
+footer{padding:44px 0 0; border-top:2px solid var(--ink); margin-top:56px; color:var(--ink-3); font-size:14px}
+footer p{max-width:var(--measure)}
+
+@media (prefers-reduced-motion: reduce){*{transition:none !important; animation:none !important}}
+@media (max-width:640px){
+  body{font-size:16px}
+  .fact{border-right:0; border-bottom:1px solid var(--line)}
+  ol.check li{grid-template-columns:22px 26px 1fr; gap:9px; padding:12px}
+}
+</style>
+
+<div class="wrap">
+
+<header class="mast">
+  <p class="kicker"><span>Plan operativo</span><span>Chile → EE.UU.</span><span>2 socios · 4–6 h/día</span></p>
+  <h1>Arranque 90 Días</h1>
+  <p class="dek">Cómo abrir la agencia de marketing y automatización con IA, qué tres servicios vender, y qué hacer cada semana hasta tener clientes pagando.</p>
+  <dl class="facts">
+    <div class="fact"><dt>Costo de partida</dt><dd>CLP 250.000 – 450.000</dd></div>
+    <div class="fact"><dt>Primer peso cobrado</dt><dd>Semana 3 – 5</dd></div>
+    <div class="fact"><dt>Meta mes 3</dt><dd>CLP 1,5 – 2,5 M / mes</dd></div>
+    <div class="fact"><dt>Primer cliente USD</dt><dd>Mes 4 – 6</dd></div>
+  </dl>
+</header>
+
+<nav class="toc" aria-label="Secciones">
+  <ol>
+    <li><a href="#orden">Orden correcto</a></li>
+    <li><a href="#legal">Constitución legal</a></li>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#precios">Precios</a></li>
+    <li><a href="#motor">Motor de clientes</a></li>
+    <li><a href="#stack">Stack y costos</a></li>
+    <li><a href="#plan">Plan semana a semana</a></li>
+    <li><a href="#dia">El día tipo</a></li>
+    <li><a href="#usa">Salto a EE.UU.</a></li>
+    <li><a href="#tendencias">Qué dura y qué se muere</a></li>
+    <li><a href="#numeros">Números de control</a></li>
+    <li><a href="#manana">Mañana mismo</a></li>
+  </ol>
+</nav>
+
+<!-- 1 -->
+<section id="orden">
+  <div class="sec-head"><div class="sec-num">01</div><h2>El orden correcto: oferta antes que empresa</h2></div>
+  <p>El error más caro al partir es gastar tres semanas en constituir, diseñar logo y armar sitio web antes de hablar con un solo cliente. Ustedes pueden vender <strong>desde el día 1 con boleta de honorarios</strong> mientras la SpA se tramita en paralelo.</p>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Se constituye la empresa cuando aparece la primera necesidad real de facturar, no antes.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque la empresa es un instrumento de cobro y de límite de responsabilidad, no un instrumento de validación. ¿Y por qué eso importa? Porque el riesgo real de un negocio de servicios en el mes 1 no es que los demanden: es que nadie compre. Todo el capital de tiempo debe ir a reducir <em>ese</em> riesgo. La estructura legal reduce un riesgo que aún no existe.</p>
+  </div>
+
+  <p>Dicho eso, ustedes sí necesitan la SpA rápido —dentro de las primeras 2 semanas— por tres razones concretas: los clientes B2B en Chile piden factura, no boleta; van a comprar herramientas en dólares y quieren esos gastos como crédito; y quieren separar el patrimonio del matrimonio desde el principio. Por eso el plan corre en dos carriles paralelos:</p>
+  <ul>
+    <li><strong>Carril A (tu esposa o tú, ~1 h/día la primera semana):</strong> trámites legales y tributarios.</li>
+    <li><strong>Carril B (los dos, el resto de las horas):</strong> nicho, oferta, lista de prospectos y conversaciones. Este carril nunca se detiene.</li>
+  </ul>
+
+  <h3>La decisión que ordena todo lo demás</h3>
+  <p>Antes de cualquier trámite, cierren esta frase en una hoja: <em>«Ayudamos a [nicho] a [resultado medible] con [mecanismo], en [plazo], o [garantía]».</em></p>
+  <p>Ejemplo trabajado: <em>«Ayudamos a clínicas dentales y estéticas de Santiago a atender el 100% de sus consultas de WhatsApp en menos de 2 minutos y llenar la agenda, con un asistente de IA conectado a su sistema de reservas, funcionando en 14 días, o devolvemos el pago».</em></p>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>El nicho se elige por tres filtros simultáneos: ticket alto, volumen de consultas entrantes, y dependencia de WhatsApp.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque el valor que ustedes crean se calcula como <span class="m">consultas perdidas × tasa de cierre × ticket</span>. Si cualquiera de los tres factores es bajo, el ahorro es chico y el cliente no puede pagar bien. ¿Y por qué es la dependencia de WhatsApp el tercer filtro y no, digamos, el presupuesto publicitario? Porque en Chile el canal donde se pierde la venta es WhatsApp fuera de horario: es un dolor que el dueño ya <em>siente</em> sin que ustedes tengan que educarlo. Vender contra un dolor conocido acorta el ciclo de venta de meses a días, y ustedes solo tienen 4–6 horas diarias.</p>
+  </div>
+
+  <h4>Nichos chilenos que pasan los tres filtros</h4>
+  <p>Clínicas dentales y estéticas · corredoras de propiedades e inmobiliarias · automotoras y ventas de maquinaria · institutos y educación continua · constructoras y proveedores industriales B2B · estudios jurídicos y contables · clínicas veterinarias. Elijan <strong>uno</strong> para los primeros 90 días.</p>
+</section>
+
+<!-- 2 -->
+<section id="legal">
+  <div class="sec-head"><div class="sec-num">02</div><h2>Constituir la empresa en Chile</h2></div>
+  <p>La forma correcta para ustedes es una <strong>SpA (Sociedad por Acciones)</strong> constituida por el portal <em>Empresa en un Día</em> (<span class="m">registrodeempresasysociedades.cl</span>).</p>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>SpA, no EIRL ni Limitada.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> La EIRL admite un solo titular —los deja a uno de los dos fuera— y la Limitada exige el consentimiento de todos los socios y una modificación formal para mover participaciones. La SpA se maneja por <em>acciones</em>: entra un tercero, o cambia el porcentaje entre ustedes, con una simple cesión. ¿Y por qué eso pesa desde el día 1 si son solo dos? Porque el escenario probable en 12 meses —un socio operativo en EE.UU., un inversionista, o repartir 60/40 según quién opera— es barato en una SpA y caro y notarial en una Ltda. Se está comprando opcionalidad futura a costo cero hoy.</p>
+  </div>
+
+  <div class="clhead">
+    <h4 style="margin:0">Checklist de constitución</h4>
+    <div class="prog"><span id="p1t">0 / 11</span><span class="track"><i id="p1b"></i></span></div>
+  </div>
+
+  <ol class="check" id="cl-legal">
+    <li><span class="idx">01</span><input type="checkbox" id="L1" aria-label="Paso 1"><label class="body" for="L1"><b>Sacar Clave Única los dos</b><span>En ChileAtiende o el Registro Civil. Es la firma que permite constituir gratis y sin notario.</span><span class="cost">$0</span></label></li>
+    <li><span class="idx">02</span><input type="checkbox" id="L2" aria-label="Paso 2"><label class="body" for="L2"><b>Definir nombre, giro y capital</b><span>Razón social + nombre de fantasía. Capital sugerido: CLP 1.000.000 suscrito y pagado.</span><span class="cost">Ver regla del capital, más abajo</span></label></li>
+    <li><span class="idx">03</span><input type="checkbox" id="L3" aria-label="Paso 3"><label class="body" for="L3"><b>Constituir la SpA en el portal</b><span>Formulario estándar en registrodeempresasysociedades.cl, firmado con Clave Única. El RUT se asigna automáticamente al terminar.</span><span class="cost">$0 con formulario estándar</span></label></li>
+    <li><span class="idx">04</span><input type="checkbox" id="L4" aria-label="Paso 4"><label class="body" for="L4"><b>Inicio de actividades en el SII</b><span>Online, primera categoría. Giros: publicidad, consultoría informática y asesoría de gestión. Poner varios giros no cuesta nada y evita problemas al facturar.</span><span class="cost">$0</span></label></li>
+    <li><span class="idx">05</span><input type="checkbox" id="L5" aria-label="Paso 5"><label class="body" for="L5"><b>Elegir régimen tributario</b><span>Pro Pyme Transparente vs. Pro Pyme General. Decidir con contador antes de firmar (ver regla abajo).</span></label></li>
+    <li><span class="idx">06</span><input type="checkbox" id="L6" aria-label="Paso 6"><label class="body" for="L6"><b>Domicilio y verificación</b><span>Pueden usar el domicilio particular. Si arriendan, necesitan autorización escrita del propietario.</span><span class="cost">$0 – 30.000/mes si usan oficina virtual</span></label></li>
+    <li><span class="idx">07</span><input type="checkbox" id="L7" aria-label="Paso 7"><label class="body" for="L7"><b>Habilitar facturación electrónica</b><span>El sistema gratuito del SII alcanza y sobra para el primer año.</span><span class="cost">$0</span></label></li>
+    <li><span class="idx">08</span><input type="checkbox" id="L8" aria-label="Paso 8"><label class="body" for="L8"><b>Patente municipal</b><span>En la municipalidad del domicilio. Se calcula sobre el capital propio (entre 2,5 y 5 por mil anual, con mínimo legal).</span><span class="cost">Desde ~1 UTM al año</span></label></li>
+    <li><span class="idx">09</span><input type="checkbox" id="L9" aria-label="Paso 9"><label class="body" for="L9"><b>Cuenta corriente empresa + medios de pago</b><span>Cuenta a nombre de la SpA. Sumar un medio de cobro (Webpay, Flow o Mercado Pago) y una cuenta multi-moneda para cobrar en USD.</span><span class="cost">$0 – 15.000/mes</span></label></li>
+    <li><span class="idx">10</span><input type="checkbox" id="L10" aria-label="Paso 10"><label class="body" for="L10"><b>Contador mensual</b><span>No lo hagan ustedes. Contratar desde el primer mes con IVA.</span><span class="cost">CLP 40.000 – 90.000/mes</span></label></li>
+    <li><span class="idx">11</span><input type="checkbox" id="L11" aria-label="Paso 11"><label class="body" for="L11"><b>Contrato tipo de servicios + anexo de datos personales</b><span>Un solo documento reutilizable: alcance, plazos, propiedad de las cuentas y accesos, confidencialidad y tratamiento de datos.</span><span class="cost">$0 si lo redactan ustedes y lo revisa un abogado</span></label></li>
+  </ol>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Declarar capital bajo (≈ CLP 1.000.000), no un capital grande "para verse serios".</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque la patente municipal se calcula como un porcentaje del capital propio declarado. ¿Y por qué se cobra sobre el capital y no sobre las ventas? Porque la patente es un tributo municipal por el <em>ejercicio</em> de la actividad, no por su resultado: la ley toma el capital como proxy del tamaño del negocio. Consecuencia práctica: inflar el capital es pagar más impuesto todos los años a cambio de nada, porque ningún cliente de servicios revisa el capital de su proveedor.</p>
+  </div>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Si van a retirar casi toda la utilidad para vivir, evalúen Pro Pyme <em>Transparente</em>. Si van a dejar plata dentro para reinvertir o contratar, evalúen Pro Pyme <em>General</em>.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> En el régimen transparente la empresa no paga impuesto de primera categoría: la utilidad se atribuye directamente a ustedes y tributa en su Global Complementario. En el general, la empresa paga primero y ustedes después usan ese pago como crédito. ¿Y por qué cambia según si retiran o no? Porque el régimen general funciona como un <em>diferimiento</em>: sirve cuando la plata se queda adentro trabajando. Si igual la sacan toda, el diferimiento no existe y solo agregaron un trámite. Confirmen con su contador: los detalles y las tasas cambian año a año.</p>
+  </div>
+
+  <h3>IVA y el cliente extranjero</h3>
+  <p>Desde 2023 los servicios en Chile quedaron, por regla general, afectos a <strong>IVA 19%</strong>. Marketing, consultoría e implementación entran ahí. Dos consecuencias prácticas:</p>
+  <ul>
+    <li><strong>Coticen siempre "+ IVA" por escrito.</strong> Un precio de CLP 1.000.000 que después resulta ser 1.190.000 quema la confianza en la primera factura.</li>
+    <li><strong>Servicios exportados</strong> (cliente sin domicilio ni residencia en Chile) pueden quedar exentos de IVA bajo la franquicia de exportación de servicios. Los requisitos formales han cambiado varias veces desde la reforma: <strong>no lo asuman</strong>, confírmenlo con el contador antes de emitir la primera factura a EE.UU.</li>
+  </ul>
+
+  <div class="warnbox">
+    <b>Dato con fecha:</b> la nueva Ley 21.719 de protección de datos personales crea una Agencia de Protección de Datos con potestad de multar, y su entrada en vigencia está fijada para fines de 2026. Esto los afecta doble: como límite a su prospección en frío y a las bases de datos que van a manipular, <em>y</em> como argumento de venta —«dejamos su base y sus automatizaciones en regla»— que casi ninguna agencia chilena está ofreciendo hoy.
+  </div>
+</section>
+
+<!-- 3 -->
+<section id="servicios">
+  <div class="sec-head"><div class="sec-num">03</div><h2>Qué vender: la matriz, y los tres elegidos</h2></div>
+  <p>Ustedes pidieron servicios con estas cuatro propiedades a la vez: poco tiempo de entrega, alto margen, fáciles de vender y difíciles de encontrar. Esas propiedades no son independientes —se derivan de una sola cosa.</p>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Vendan lo que está pegado al <em>ingreso</em> del cliente, no a su <em>comunicación</em>.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque el precio de un servicio no lo fija su costo, lo fija el valor atribuible que el comprador le reconoce. Un servicio ligado a ingreso permite decir «recuperamos 30 consultas al mes × 25% de cierre × $400.000 de ticket = $3.000.000». Un servicio ligado a comunicación («posteos», «diseño») no permite esa frase. ¿Y por qué no la permite? Porque su efecto es difuso y compartido con otras diez causas, así que el comprador no puede aislarlo — y cuando el comprador no puede medir, compara por precio. Ahí se muere el margen. Ese es el mecanismo exacto por el que las agencias de contenido cobran poco y las de "sistemas de venta" cobran mucho haciendo menos horas.</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Servicio</th><th>Entrega</th><th>Margen</th><th>Recurrencia</th><th>Fácil de vender</th><th>Escasez de oferta</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Motor de citas con IA</strong> (WhatsApp + agenda)</td><td class="n">10–14 días</td><td><span class="pill p-hi">Alto</span></td><td><span class="pill p-hi">Sí, mensual</span></td><td><span class="pill p-hi">Alta</span></td><td><span class="pill p-hi">Alta</span></td></tr>
+        <tr><td><strong>Reactivación de base de datos</strong></td><td class="n">5–7 días</td><td><span class="pill p-hi">Muy alto</span></td><td><span class="pill p-lo">Puntual</span></td><td><span class="pill p-hi">Altísima</span></td><td><span class="pill p-mid">Media</span></td></tr>
+        <tr><td><strong>Automatización de operaciones</strong> (n8n / Make + IA)</td><td class="n">2–4 semanas</td><td><span class="pill p-hi">Alto</span></td><td><span class="pill p-hi">Sí, mensual</span></td><td><span class="pill p-mid">Media</span></td><td><span class="pill p-hi">Alta</span></td></tr>
+        <tr><td>Implementación de CRM + automatización</td><td class="n">3–5 semanas</td><td><span class="pill p-mid">Medio-alto</span></td><td><span class="pill p-hi">Muy alta</span></td><td><span class="pill p-mid">Media</span></td><td><span class="pill p-mid">Media</span></td></tr>
+        <tr><td>Panel de atribución y reportería</td><td class="n">1–2 semanas</td><td><span class="pill p-mid">Medio</span></td><td><span class="pill p-hi">Sí</span></td><td><span class="pill p-mid">Media</span></td><td><span class="pill p-mid">Media</span></td></tr>
+        <tr><td>Agente de voz para llamadas</td><td class="n">2–4 semanas</td><td><span class="pill p-hi">Alto</span></td><td><span class="pill p-hi">Sí</span></td><td><span class="pill p-mid">Media</span></td><td><span class="pill p-hi">Muy alta</span></td></tr>
+        <tr><td>Gestión de pauta (Meta / Google)</td><td class="n">Continuo</td><td><span class="pill p-lo">Bajo-medio</span></td><td><span class="pill p-hi">Sí</span></td><td><span class="pill p-mid">Media</span></td><td><span class="pill p-lo">Nula</span></td></tr>
+        <tr><td>Contenido y redes con IA</td><td class="n">Continuo</td><td><span class="pill p-lo">Bajo</span></td><td><span class="pill p-hi">Sí</span></td><td><span class="pill p-hi">Alta</span></td><td><span class="pill p-lo">Nula</span></td></tr>
+        <tr><td>Chatbot básico de FAQ</td><td class="n">3–5 días</td><td><span class="pill p-lo">Bajo</span></td><td><span class="pill p-lo">Poca</span></td><td><span class="pill p-mid">Media</span></td><td><span class="pill p-lo">Nula</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Los tres que van a vender los primeros 90 días</h3>
+
+  <div class="picks">
+    <div class="pick">
+      <div class="tag">Oferta ancla</div>
+      <h5>Motor de Citas</h5>
+      <p>Un agente de IA que responde WhatsApp y formularios en menos de 2 minutos, 24/7, califica al interesado, agenda en el calendario del cliente y hace 5 seguimientos automáticos. Reporte semanal de citas generadas.</p>
+      <dl>
+        <dt>Implementación</dt><dd>CLP 1.200.000 – 2.500.000</dd>
+        <dt>Mensual</dt><dd>CLP 350.000 – 800.000</dd>
+        <dt>Horas de entrega</dt><dd>18 – 30 h</dd>
+        <dt>Mantención</dt><dd>2 – 4 h/mes</dd>
+      </dl>
+    </div>
+    <div class="pick">
+      <div class="tag">Puerta de entrada</div>
+      <h5>Reactivación de Base</h5>
+      <p>Toman la base muerta del cliente (contactos que cotizaron y nunca compraron), la limpian y segmentan con IA, y corren una campaña de 7 días por WhatsApp y correo con respuesta automatizada. Genera citas de una base que el cliente ya pagó.</p>
+      <dl>
+        <dt>Precio fijo</dt><dd>CLP 390.000 – 690.000</dd>
+        <dt>O por resultado</dt><dd>CLP 25.000 – 60.000 / cita</dd>
+        <dt>Horas de entrega</dt><dd>8 – 12 h</dd>
+        <dt>Ciclo de venta</dt><dd>1 – 3 días</dd>
+      </dl>
+    </div>
+    <div class="pick">
+      <div class="tag">Retención</div>
+      <h5>Operación Automatizada</h5>
+      <p>Cotizaciones, onboarding de clientes, informes y traspasos entre sistemas resueltos con n8n o Make más IA. Se vende en horas recuperadas al mes y se cobra por proceso.</p>
+      <dl>
+        <dt>Por proceso</dt><dd>CLP 600.000 – 1.500.000</dd>
+        <dt>Soporte mensual</dt><dd>CLP 250.000 – 600.000</dd>
+        <dt>Horas de entrega</dt><dd>12 – 25 h</dd>
+        <dt>Retención típica</dt><dd>12+ meses</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>La reactivación de base es el producto de entrada; el motor de citas es el producto de margen. Nunca al revés.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque sin casos de éxito su mayor obstáculo no es el precio, es la falta de confianza. La reactivación resuelve exactamente eso: usa un activo que el cliente ya tiene, no requiere que cambie nada de su operación, y muestra resultado en 7 días. ¿Y por qué eso convierte tan bien? Porque el riesgo percibido por el comprador es casi cero —no está apostando presupuesto nuevo, está exprimiendo dinero ya gastado— y el riesgo percibido es la variable que realmente bloquea una primera compra a un proveedor desconocido. Una vez que hay un resultado medido, el motor de citas se vende solo y a otro precio.</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="precios">
+  <div class="sec-head"><div class="sec-num">04</div><h2>Cómo poner el precio</h2></div>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Precio ancla = 10% del valor anual creado o recuperado. Nunca cobren por hora.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Cobrar por hora castiga exactamente lo que ustedes hacen bien: automatizar. Si mejoran y tardan la mitad, ganan la mitad. ¿Y por qué el 10% del valor y no el 30%? Porque el comprador necesita ver un múltiplo evidente para decidir rápido; bajo 5× empieza a pensarlo, sobre 10× dice que sí sin negociar. El 10% deja el múltiplo en 10× y saca la conversación del terreno del costo.</p>
+  </div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Etapa</th><th>Prueba social</th><th>Implementación</th><th>Mensual</th><th>Qué cambia</th></tr></thead>
+      <tbody>
+        <tr><td class="n">Clientes 1–2</td><td>Ninguna</td><td class="n">CLP 0 – 390.000</td><td class="n">CLP 200.000</td><td>Se cobra barato a cambio de caso documentado + testimonio en video + derecho a usar el logo</td></tr>
+        <tr><td class="n">Clientes 3–5</td><td>1 caso con números</td><td class="n">CLP 890.000</td><td class="n">CLP 350.000</td><td>Ya se cobra por adelantado el 100% de la implementación</td></tr>
+        <tr><td class="n">Clientes 6–10</td><td>3 casos, mismo rubro</td><td class="n">CLP 1.500.000</td><td class="n">CLP 500.000</td><td>Precio único publicado, sin descuentos, con lista de espera</td></tr>
+        <tr><td class="n">EE.UU.</td><td>3+ casos en inglés</td><td class="n">USD 2.500 – 6.000</td><td class="n">USD 800 – 2.500</td><td>Mismo trabajo, mercado con 4–6× el poder adquisitivo</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><strong>Estructura de cobro:</strong> 100% de la implementación por adelantado (o 50/50 si el monto asusta), y el mensual domiciliado desde el mes 2. Contrato de 3 meses mínimo, renovación automática.</p>
+  <p><strong>Garantía:</strong> «Si en 30 días no generamos al menos X citas calificadas, seguimos trabajando gratis hasta lograrlo». Es más vendedora que devolver el dinero y les cuesta menos, porque su costo marginal es tiempo, no plata.</p>
+</section>
+
+<!-- 5 -->
+<section id="motor">
+  <div class="sec-head"><div class="sec-num">05</div><h2>El motor para conseguir clientes desde cero</h2></div>
+  <p>Sin audiencia, sin cartera y sin presupuesto, hay un solo canal que produce clientes de forma predecible en las primeras semanas: <strong>contacto directo, personalizado y con una demostración adjunta</strong>. Todo lo demás (contenido, comunidad, alianzas) es acumulativo y se construye <em>en paralelo</em>, pero no paga las cuentas del mes 1.</p>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>El 70% del tiempo comercial va a contacto directo con demostración; 20% a alianzas; 10% a contenido. No al revés.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque el contacto directo es el único canal cuyo resultado ustedes controlan por volumen: 40 contactos hoy producen conversaciones esta semana. El contenido depende de que un algoritmo los distribuya y de acumulación en el tiempo — su retorno llega en el mes 4, no en el mes 1. ¿Y por qué entonces hacer contenido igual? Porque baja el costo del canal directo: el prospecto que recibe su mensaje y luego revisa su perfil y ve tres automatizaciones funcionando, responde mucho más. El contenido no es un canal de adquisición al principio: es la prueba que hace funcionar al canal que sí lo es.</p>
+  </div>
+
+  <h3>Las cinco piezas del motor</h3>
+  <ol>
+    <li><strong>Lista.</strong> 200 empresas del nicho elegido, con nombre del dueño o encargado, WhatsApp, correo y una observación específica del negocio. Se arma desde Google Maps, Instagram y LinkedIn. Es la tarea más aburrida y la más determinante.</li>
+    <li><strong>Señal.</strong> Un video de 3 minutos, sin editar, mostrando el problema <em>de esa empresa en particular</em>: le escriben a su WhatsApp un domingo a las 21:00, graban que nadie contesta, y muestran su asistente respondiendo la misma consulta. Se envía el link sin pedir nada.</li>
+    <li><strong>Canal.</strong> WhatsApp Business primero (en Chile es donde responden), correo como segundo toque, LinkedIn para B2B, y presencial en gremios y cámaras de comercio locales.</li>
+    <li><strong>Oferta de entrada.</strong> El piloto de reactivación de 14 días con garantía. Precio bajo, riesgo bajo, resultado medible.</li>
+    <li><strong>Prueba.</strong> Cada entrega termina en un caso de una página: situación, qué instalaron, número antes, número después, cita textual del cliente. Sin esto no pueden subir el precio.</li>
+  </ol>
+
+  <h3>Los números que hay que mover</h3>
+  <p>Con 40 contactos nuevos al día entre los dos —unos 800 al mes— y tasas conservadoras:</p>
+
+  <div class="funnel">
+    <div class="fr"><div class="lbl"><span class="meter" style="width:220px"></span>Contactos nuevos / mes</div><div class="v">800</div></div>
+    <div class="fr"><div class="lbl"><span class="meter" style="width:132px"></span>Responden</div><div class="v">80–120<small>10–15%</small></div></div>
+    <div class="fr"><div class="lbl"><span class="meter" style="width:60px"></span>Conversación real</div><div class="v">40–60</div></div>
+    <div class="fr"><div class="lbl"><span class="meter" style="width:28px"></span>Reuniones agendadas</div><div class="v">15–25</div></div>
+    <div class="fr"><div class="lbl"><span class="meter" style="width:10px"></span>Cierres</div><div class="v">3–6<small>20–25%</small></div></div>
+  </div>
+  <p style="font-size:14.5px; color:var(--ink-3); max-width:760px">Con ticket promedio de implementación de CLP 890.000 más CLP 350.000 mensuales, cuatro cierres en el mes son ~CLP 3,5 M de una vez y ~CLP 1,4 M recurrentes. Ese es todo el modelo.</p>
+
+  <h3>Alianzas: el atajo que casi nadie usa</h3>
+  <p>Hay cuatro tipos de socio que ya tienen la confianza de su cliente ideal y no compiten con ustedes. Ofrézcanles 10–20% de comisión recurrente o trabajo en marca blanca:</p>
+  <ul>
+    <li><strong>Agencias de publicidad y diseño</strong> que generan leads pero no saben automatizar el seguimiento. Son su mejor socio: ustedes hacen que sus campañas se vean mejor.</li>
+    <li><strong>Contadores y estudios contables</strong> — hablan con cientos de pymes al mes y les preguntan por proveedores.</li>
+    <li><strong>Implementadores de ERP y software de gestión</strong> (Defontana, Bsale, Nubox y similares).</li>
+    <li><strong>Consultores y comunidades</strong>, incluido el grupo de Benjamín. Aquí la jugada correcta no es publicar «ofrezco servicios»: es <em>publicar los resultados de sus dos primeros pilotos con números</em> y ofrecer hacer una automatización gratis y en vivo para alguien de la comunidad. Eso genera referidos; el aviso no.</li>
+  </ul>
+</section>
+
+<!-- 6 -->
+<section id="stack">
+  <div class="sec-head"><div class="sec-num">06</div><h2>Herramientas y costo fijo real</h2></div>
+  <p>El costo de operar los primeros tres meses debe quedar bajo CLP 200.000 al mes. Todo lo que no esté en esta tabla, no se compra hasta que un cliente lo pague.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Función</th><th>Herramienta</th><th>Costo mensual</th><th>Cuándo</th></tr></thead>
+      <tbody>
+        <tr><td>Automatización / orquestación</td><td>n8n (self-hosted o cloud) o Make</td><td class="n">USD 0 – 25</td><td>Semana 1</td></tr>
+        <tr><td>Modelos de IA</td><td>API de Claude + Claude Code</td><td class="n">USD 20 – 60</td><td>Semana 1</td></tr>
+        <tr><td>WhatsApp API</td><td>Proveedor de WhatsApp Business API</td><td class="n">USD 0 – 40 + conversaciones</td><td>Semana 2</td></tr>
+        <tr><td>CRM y agenda</td><td>Pipedrive / HubSpot free / Cal.com</td><td class="n">USD 0 – 30</td><td>Semana 1</td></tr>
+        <tr><td>Correo en frío</td><td>Dominio secundario + herramienta de envío</td><td class="n">USD 15 – 40</td><td>Semana 2</td></tr>
+        <tr><td>Video y demos</td><td>Loom (plan gratis alcanza)</td><td class="n">USD 0</td><td>Semana 1</td></tr>
+        <tr><td>Sitio y propuestas</td><td>Una página + PDF con plantilla</td><td class="n">USD 0 – 15</td><td>Semana 2</td></tr>
+        <tr><td>Contabilidad</td><td>Contador externo</td><td class="n">CLP 40.000 – 90.000</td><td>Mes 1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Construyan cada automatización una vez como <em>plantilla</em>, no como proyecto a medida.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque el margen de una agencia de servicios no está en el precio, está en la caída del costo de entrega del cliente 1 al cliente 10. Con plantilla, el cliente 5 toma 6 horas en vez de 25 y el precio se mantiene. ¿Y por qué eso obliga a elegir un solo nicho? Porque una plantilla solo se reutiliza si los clientes se parecen: mismo lenguaje, mismos sistemas, mismas objeciones. Diez clientes de diez rubros distintos son diez proyectos a medida y cero apalancamiento — es la razón real por la que la mayoría de las agencias trabaja mucho y gana poco.</p>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="plan">
+  <div class="sec-head"><div class="sec-num">07</div><h2>Plan semana a semana</h2></div>
+  <p>Trece semanas. Cada una tiene un entregable que se marca hecho o no hecho —no hay medias tintas— y un reparto entre los dos. El supuesto es 5 días hábiles de 4–6 horas <em>por persona</em>.</p>
+
+  <div class="clhead">
+    <h4 style="margin:0">Entregables de las 13 semanas</h4>
+    <div class="prog"><span id="p2t">0 / 13</span><span class="track"><i id="p2b"></i></span></div>
+  </div>
+
+  <ol class="check" id="cl-weeks">
+    <li><span class="idx">S1</span><input type="checkbox" id="W1" aria-label="Semana 1"><label class="body" for="W1"><b>Nicho cerrado, oferta escrita, SpA en trámite</b><span>Elegir 1 nicho. Escribir la frase de oferta. Constituir la SpA. Armar el guion de 6 preguntas para la llamada de diagnóstico. Grabar la primera demo del asistente funcionando con datos falsos.</span></label></li>
+    <li><span class="idx">S2</span><input type="checkbox" id="W2" aria-label="Semana 2"><label class="body" for="W2"><b>Lista de 200 + 100 primeros contactos enviados</b><span>Armar la lista con datos verificados. Iniciar actividades en el SII. Enviar los primeros 100 mensajes con video personalizado. Conseguir 2 pilotos gratis a cambio de caso documentado (partan por conocidos).</span></label></li>
+    <li><span class="idx">S3</span><input type="checkbox" id="W3" aria-label="Semana 3"><label class="body" for="W3"><b>Primeros 2 pilotos entregados y medidos</b><span>Instalar, medir el antes y el después, grabar el testimonio. 200 contactos nuevos. Primeras 3–5 reuniones de diagnóstico.</span></label></li>
+    <li><span class="idx">S4</span><input type="checkbox" id="W4" aria-label="Semana 4"><label class="body" for="W4"><b>Primer cliente pagado</b><span>Caso de estudio #1 publicado con números. Presentar propuesta a todo el que tuvo reunión. Cobrar por adelantado. Precio: implementación CLP 390.000–890.000.</span></label></li>
+    <li><span class="idx">S5</span><input type="checkbox" id="W5" aria-label="Semana 5"><label class="body" for="W5"><b>Plantilla v1 documentada</b><span>Convertir lo hecho en plantilla reutilizable con checklist de instalación. Meta: bajar la entrega de 25 a 15 horas. 200 contactos nuevos, sin excepción.</span></label></li>
+    <li><span class="idx">S6</span><input type="checkbox" id="W6" aria-label="Semana 6"><label class="body" for="W6"><b>Cliente 2 y 3 cerrados</b><span>Subir precio a CLP 890.000. Primeras 4 reuniones con socios de canal (2 agencias, 1 contador, 1 implementador de ERP).</span></label></li>
+    <li><span class="idx">S7</span><input type="checkbox" id="W7" aria-label="Semana 7"><label class="body" for="W7"><b>Oferta mensual activada</b><span>Convertir a los clientes 1–3 en mensualidad con reporte. Primer MRR real. Publicar caso #2.</span></label></li>
+    <li><span class="idx">S8</span><input type="checkbox" id="W8" aria-label="Semana 8"><label class="body" for="W8"><b>Segundo servicio productizado</b><span>Empaquetar «Operación Automatizada» con alcance fijo y precio publicado. Vendérselo como upsell a la cartera existente: es la venta más barata que van a hacer.</span></label></li>
+    <li><span class="idx">S9</span><input type="checkbox" id="W9" aria-label="Semana 9"><label class="body" for="W9"><b>Clientes 4 y 5</b><span>Sistema de referidos activo con comisión escrita. Revisar horas reales de entrega por cliente y podar lo que consume más de lo presupuestado.</span></label></li>
+    <li><span class="idx">S10</span><input type="checkbox" id="W10" aria-label="Semana 10"><label class="body" for="W10"><b>Primer apoyo contratado</b><span>Un asistente por horas o freelance para armado de listas y edición. Regla: se contrata cuando el cuello de botella es tiempo de ustedes, no cuando sobra plata.</span></label></li>
+    <li><span class="idx">S11</span><input type="checkbox" id="W11" aria-label="Semana 11"><label class="body" for="W11"><b>Activos en inglés listos</b><span>Casos, sitio, propuesta y demo traducidos y regrabados. Definir nicho gemelo en EE.UU. Armar lista de 200 empresas allá.</span></label></li>
+    <li><span class="idx">S12</span><input type="checkbox" id="W12" aria-label="Semana 12"><label class="body" for="W12"><b>Primeros 200 contactos en EE.UU.</b><span>Correo y LinkedIn (allá WhatsApp no funciona). Ajustar precio a USD. Confirmar con el contador cómo facturar al extranjero.</span></label></li>
+    <li><span class="idx">S13</span><input type="checkbox" id="W13" aria-label="Semana 13"><label class="body" for="W13"><b>Cierre de trimestre y decisión</b><span>Revisar los ocho números de control. Decidir: subir precio, cambiar nicho, o escalar el que funciona. Definir si corresponde abrir estructura en EE.UU.</span></label></li>
+  </ol>
+
+  <h3>Cómo se reparten el trabajo</h3>
+  <div class="split">
+    <div>
+      <h4>Rol A — Construcción y entrega</h4>
+      <ul>
+        <li>Armar y mantener las automatizaciones</li>
+        <li>Instalar en cada cliente y documentar la plantilla</li>
+        <li>Grabar las demos personalizadas</li>
+        <li>Soporte técnico y reportes mensuales</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Rol B — Comercial y administración</h4>
+      <ul>
+        <li>Armar listas y enviar los contactos diarios</li>
+        <li>Llevar las conversaciones y agendar reuniones</li>
+        <li>Hacer las llamadas de diagnóstico y enviar propuestas</li>
+        <li>Trámites, contador, cobranza y contratos</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Reparto por función, no por cliente. Y ambos hacen prospección los primeros 60 días.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Repartir por cliente («este es tuyo, este es mío») duplica el aprendizaje y no construye plantillas: cada uno resuelve el mismo problema por separado. ¿Y por qué igual los dos prospectan al principio, si eso rompe la especialización? Porque en los primeros 60 días la información más valiosa no está en la entrega, está en las objeciones. Quien no escucha las objeciones construye la automatización equivocada — y el que arma el producto necesita oírlas de primera fuente, no resumidas.</p>
+  </div>
+</section>
+
+<!-- 8 -->
+<section id="dia">
+  <div class="sec-head"><div class="sec-num">08</div><h2>El día tipo</h2></div>
+  <p>La misma forma todos los días hábiles. La disciplina no está en el contenido de cada bloque, está en que el bloque de prospección va <strong>primero</strong> y nunca se salta.</p>
+
+  <div class="day">
+    <div class="blk"><div class="t">BLOQUE 1</div><div class="h">90<small> min</small></div><div class="n">Prospección</div><p>20 contactos nuevos por persona, con video o nota de voz personalizada. Antes que el correo, antes que las noticias, antes que cualquier cosa.</p></div>
+    <div class="blk"><div class="t">BLOQUE 2</div><div class="h">120<small> min</small></div><div class="n">Entrega y construcción</div><p>Trabajo de clientes activos o, si no hay, construir la plantilla y la demo del nicho.</p></div>
+    <div class="blk"><div class="t">BLOQUE 3</div><div class="h">60<small> min</small></div><div class="n">Conversaciones</div><p>Responder, agendar, hacer diagnósticos y enviar propuestas el mismo día. Nunca dejar una propuesta para mañana.</p></div>
+    <div class="blk"><div class="t">BLOQUE 4</div><div class="h">30<small> min</small></div><div class="n">Contenido y números</div><p>Un posteo mostrando algo real que construyeron hoy, y anotar los cinco números del día en una planilla.</p></div>
+  </div>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Prospección primero, incluso con clientes activos. Sobre todo con clientes activos.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque el trabajo de entrega siempre tiene urgencia y la prospección nunca la tiene, así que la entrega se come el día entero si se lo permiten. ¿Y por qué eso es fatal y no solo incómodo? Porque el ingreso de este mes se produjo con la prospección del mes pasado: hay un desfase de 30–45 días entre contactar y cobrar. Un mes sin prospectar no se nota en el mes 1 — se nota como un mes sin ingresos en el mes 2, cuando ya no hay forma de arreglarlo. Ese ciclo de hambre y atracón es lo que mata a la mayoría de las agencias chicas.</p>
+  </div>
+
+  <p><strong>Viernes, 60 min extra:</strong> revisión de la semana. Números de control, qué mensaje funcionó mejor, qué objeción se repitió, y ajuste de una sola cosa para la semana siguiente. Una, no cinco.</p>
+</section>
+
+<!-- 9 -->
+<section id="usa">
+  <div class="sec-head"><div class="sec-num">09</div><h2>El salto a Estados Unidos</h2></div>
+  <p>No abran empresa en EE.UU. antes de tener clientes allá. El orden es: vender primero facturando desde Chile, y constituir después, cuando el volumen lo justifique.</p>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>La LLC se abre cuando ya hay ingreso recurrente en dólares, no para conseguirlo.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Una LLC de dueño extranjero cuesta constituirla, mantener agente registrado, pagar tasa estatal anual y —esto es lo que la gente ignora— presentar declaraciones informativas obligatorias todos los años aunque no haya facturado un dólar; omitirlas tiene multas altas y automáticas. ¿Y por qué entonces todos dicen que hay que abrirla? Porque confunden dos problemas distintos: <em>cobrar</em> en dólares (que se resuelve con una cuenta multi-moneda y una factura de exportación desde Chile) con <em>operar</em> en EE.UU. (que sí requiere estructura). Solo el segundo justifica el costo, y aparece cuando el cliente exige un proveedor local o cuando el volumen hace que el ahorro supere el costo de cumplimiento.</p>
+  </div>
+
+  <h4>Qué cambia al vender allá</h4>
+  <ul>
+    <li><strong>El canal.</strong> WhatsApp no sirve. Correo en frío con dominio secundario calentado, LinkedIn, y video personalizado.</li>
+    <li><strong>El precio.</strong> El mismo trabajo se cobra 4–6× más. Cobrar precios chilenos en dólares no los hace competitivos: los hace sospechosos.</li>
+    <li><strong>La prueba.</strong> Necesitan casos en inglés con nombres reconocibles o al menos rubro y números. Un caso chileno bien contado sirve; un caso sin números no.</li>
+    <li><strong>El nicho.</strong> Vayan al <em>mismo</em> rubro que dominan en Chile, no a otro. Todo el apalancamiento está en repetir el mismo problema.</li>
+    <li><strong>La zona horaria.</strong> Chile queda a 1–4 horas de la costa este según la época del año. Es una ventaja frente a proveedores asiáticos y hay que decirlo explícitamente.</li>
+  </ul>
+
+  <p><strong>Cobro:</strong> cuenta multi-moneda (tipo Wise o Payoneer) + factura de exportación desde la SpA. Cuando abran LLC, se suma un banco estadounidense y una pasarela para cobrar con tarjeta. <strong>Confirmen el tratamiento de IVA de la exportación de servicios con su contador antes de la primera factura.</strong></p>
+</section>
+
+<!-- 10 -->
+<section id="tendencias">
+  <div class="sec-head"><div class="sec-num">10</div><h2>Qué dura y qué se muere</h2></div>
+  <p>Ustedes preguntaron por rentabilidad sostenible, no solo por lo que se vende hoy. La respuesta se deriva de un solo criterio.</p>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Sobrevive el servicio donde ustedes tocan el dato del cliente y responden por un número. Se comoditiza el servicio que produce un archivo.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque la IA está derrumbando el costo marginal de <em>producir</em> (texto, imagen, video, código simple) pero no el costo de <em>integrar y responder</em>: eso requiere acceso, contexto y alguien que asuma la consecuencia si falla. ¿Y por qué la integración resiste? Por dos fuerzas: costo de cambio —una vez que ustedes están dentro del CRM y de los procesos, sacarlos duele— y responsabilidad, que no se automatiza porque nadie compra un SLA a un modelo. Todo servicio que no tenga al menos una de esas dos fuerzas va a bajar de precio.</p>
+  </div>
+
+  <div class="dur">
+    <div class="keep">
+      <h4>Se sostiene 3+ años</h4>
+      <ul>
+        <li><strong>Integración de datos y CRM</strong> — costo de cambio alto</li>
+        <li><strong>Agentes con acceso a sistemas</strong> (agendar, cotizar, cobrar)</li>
+        <li><strong>Atribución y reportería</strong> — el que mide, decide</li>
+        <li><strong>Agentes de voz</strong> — oferta escasa, alto valor por llamada recuperada</li>
+        <li><strong>Cumplimiento de datos e IA</strong> — la Ley 21.719 en Chile crea demanda con fecha</li>
+        <li><strong>Servicios pagados por resultado</strong> — nadie compite por precio contra el riesgo compartido</li>
+      </ul>
+    </div>
+    <div class="drop">
+      <h4>Cae a precio de commodity</h4>
+      <ul>
+        <li><strong>Generación de contenido y posteos</strong> — el cliente ya lo hace solo</li>
+        <li><strong>Chatbots de preguntas frecuentes</strong> — viene incluido en las plataformas</li>
+        <li><strong>Diseño de piezas gráficas sueltas</strong></li>
+        <li><strong>Cursos y consultorías de «cómo usar IA»</strong> — mercado saturado, sin recurrencia</li>
+        <li><strong>Edición de video en volumen</strong></li>
+        <li><strong>Gestión de pauta sin integración al CRM</strong> — la optimización se automatizó sola</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Una veta específica que casi nadie está atendiendo</h3>
+  <p>Reportería de sostenibilidad y ESG. En Chile la normativa financiera ya obliga a las sociedades fiscalizadas a reportar información ambiental, social y de gobernanza, y esas empresas se lo están exigiendo hacia abajo a sus proveedores. Recolectar, consolidar y reportar esos datos es hoy un trabajo manual de planilla, con ticket alto, recurrencia anual garantizada por ley y casi ninguna agencia ofreciéndolo. No es para el mes 1 —el ciclo de venta es largo y corporativo— pero es la mejor apuesta de mediano plazo si quieren un segundo vertical desde el mes 6.</p>
+</section>
+
+<!-- 11 -->
+<section id="numeros">
+  <div class="sec-head"><div class="sec-num">11</div><h2>Números de control y umbrales de decisión</h2></div>
+  <p>Ocho números en una planilla, actualizados a diario. Cada uno tiene un umbral que dice <em>qué</em> arreglar, no solo que algo anda mal.</p>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>Número</th><th>Meta</th><th>Si está bajo, el problema es…</th></tr></thead>
+      <tbody>
+        <tr><td>Contactos nuevos / día</td><td class="n">40</td><td>Disciplina. No hay diagnóstico posible bajo este número.</td></tr>
+        <tr><td>Tasa de respuesta</td><td class="n">≥ 10%</td><td>El mensaje o la lista. Cambien el primer renglón antes que el canal.</td></tr>
+        <tr><td>Respuesta → reunión</td><td class="n">≥ 25%</td><td>La oferta no es específica o no hay razón para reunirse.</td></tr>
+        <tr><td>Reunión → propuesta</td><td class="n">≥ 70%</td><td>El diagnóstico. No están calificando antes de agendar.</td></tr>
+        <tr><td>Propuesta → cierre</td><td class="n">≥ 25%</td><td>Precio, garantía o falta de prueba. Casi nunca es el precio.</td></tr>
+        <tr><td>Ticket promedio</td><td class="n">↑ cada mes</td><td>Están vendiendo tareas en vez de resultados.</td></tr>
+        <tr><td>Horas de entrega / cliente</td><td class="n">↓ cada cliente</td><td>No están construyendo plantilla; están haciendo proyectos a medida.</td></tr>
+        <tr><td>Ingreso recurrente (MRR)</td><td class="n">↑ cada mes</td><td>Están vendiendo implementaciones sueltas sin convertirlas en mensualidad.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="regla">
+    <b>Regla</b>
+    <p>Se diagnostica de arriba hacia abajo y se arregla un solo eslabón a la vez.</p>
+    <p><b style="display:inline; font-family:var(--body); font-size:15.5px; letter-spacing:0; text-transform:none; color:var(--ink-2)">¿Por qué?</b> Porque cada tasa depende de la anterior: si la tasa de respuesta está en 3%, el número de cierres no dice nada sobre su oferta —la muestra es demasiado chica para significar algo. ¿Y por qué un solo cambio a la vez? Porque si cambian mensaje, precio y canal la misma semana, la semana siguiente tendrán un resultado distinto y ninguna forma de saber cuál de los tres lo produjo. Sin atribución no hay aprendizaje, y sin aprendizaje están adivinando con más pasos.</p>
+  </div>
+
+  <h4>Riesgos que hay que vigilar</h4>
+  <ul>
+    <li><strong>Un cliente sobre el 40% del ingreso.</strong> Deja de ser cliente y pasa a ser jefe.</li>
+    <li><strong>Entregas no documentadas.</strong> Si la automatización solo existe en la cabeza de uno de los dos, no tienen empresa: tienen dos pegas.</li>
+    <li><strong>Aceptar fuera de nicho «porque paga».</strong> Cada excepción borra el apalancamiento de la plantilla. Se acepta solo si el margen es al menos el doble.</li>
+    <li><strong>Ir a EE.UU. antes de tener 5 casos sólidos.</strong> Es duplicar el esfuerzo de arranque en un mercado más caro y más exigente.</li>
+    <li><strong>Bases de datos de terceros sin base legal.</strong> Con la nueva ley de datos esto pasa de ser incómodo a ser multable.</li>
+  </ul>
+</section>
+
+<!-- 12 -->
+<section id="manana">
+  <div class="sec-head"><div class="sec-num">12</div><h2>Qué hacer mañana</h2></div>
+  <p>Cinco acciones. Cabe en una jornada de cuatro horas y desbloquea todo lo demás.</p>
+  <ol>
+    <li><strong>Elijan el nicho</strong> (30 min). Uno solo. Escríbanlo en un papel y péguenlo a la vista.</li>
+    <li><strong>Escriban la frase de oferta</strong> con nicho, resultado medible, mecanismo, plazo y garantía (45 min).</li>
+    <li><strong>Armen las primeras 30 empresas</strong> de la lista, con nombre del dueño y WhatsApp (60 min).</li>
+    <li><strong>Graben la demo</strong>: escríbanle a tres de esas empresas por WhatsApp como si fueran un cliente, muestren que no contestan o contestan tarde, y muestren su asistente respondiendo la misma consulta (60 min).</li>
+    <li><strong>Envíen los primeros 10 mensajes</strong> con el video adjunto (45 min).</li>
+  </ol>
+  <p>La empresa se constituye esta misma semana en paralelo, pero el día 1 se gasta en la oferta y en los primeros diez mensajes. Todo lo demás en este plan depende de que ese bloque de 90 minutos exista mañana y todos los días siguientes.</p>
+</section>
+
+<footer>
+  <p><strong>Nota sobre lo tributario y legal.</strong> Las cifras, regímenes y plazos de este plan son referenciales y las normas chilenas de IVA a los servicios, exportación de servicios y protección de datos han cambiado en los últimos años y siguen en transición. Validen la elección de régimen, el tratamiento del IVA y la facturación al extranjero con un contador antes de emitir la primera factura.</p>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var KEY = "arranque90.v1";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch(e) { state = {}; }
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+  }
+
+  function wire(listId, labelEl, barEl){
+    var list = document.getElementById(listId);
+    if(!list) return;
+    var boxes = Array.prototype.slice.call(list.querySelectorAll('input[type="checkbox"]'));
+    function paint(){
+      var done = 0;
+      boxes.forEach(function(b){
+        var li = b.closest("li");
+        if(b.checked){ done++; li.classList.add("done"); } else { li.classList.remove("done"); }
+      });
+      labelEl.textContent = done + " / " + boxes.length;
+      barEl.style.width = (boxes.length ? (done / boxes.length * 100) : 0) + "%";
+    }
+    boxes.forEach(function(b){
+      if(state[b.id]) b.checked = true;
+      b.addEventListener("change", function(){
+        state[b.id] = b.checked;
+        save();
+        paint();
+      });
+    });
+    paint();
+  }
+
+  wire("cl-legal", document.getElementById("p1t"), document.getElementById("p1b"));
+  wire("cl-weeks", document.getElementById("p2t"), document.getElementById("p2b"));
+})();
+</script>
